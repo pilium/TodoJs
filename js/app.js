@@ -1,95 +1,117 @@
 const main = (document => {
-	const todoForm = document.getElementById('todo-form');
-	const addInput = document.getElementById('add-input');
-	const todoList = document.getElementById('todo-list');
-	const todoItems = document.querySelectorAll('.todo-item');
+  const todoForm = document.getElementById("todo-form");
+  const addInput = document.getElementById("add-input");
+  const todoList = document.getElementById("todo-list");
+  const todoItems = document.querySelectorAll(".todo-item");
 
-function createElement(tag, props, ...children) {
-	const element = document.createElement(tag);
+  function createElement(tag, props, ...children) {
+    const element = document.createElement(tag);
 
-	Object.keys(props).forEach(key => element[key] = props[key]);
-	
-	console.log(tag, children);
-	
-	if(children.length > 0) {
-		children.forEach(child => {
-			if(typeof child === 'string') {
-				child = document.createTextNode(child);
-			}
-			
-			element.appendChild(child);
-		})
-	}
-	
-	return element;
-}
+    Object.keys(props).forEach(key => (element[key] = props[key]));
 
-function createTodoItem(title) {
-	const checkbox = createElement('input', {type: 'checkbox', className: 'checkbox'});
-	const label = createElement('label',{className: 'title'}, title);
-	const editInput = createElement('input', {input: 'text', className: 'textfield'});
-	const editButton = createElement('button',{className: 'edit'}, 'Изменить');
-	const deleteButton = createElement('button',{className: 'delete'}, 'Удалить');
-	const listItem = createElement('li',{className: 'todo-item'}, 					checkbox,label,editInput,editButton,deleteButton);
-	
-	bindEvents(listItem);
+    console.log(tag, children);
 
-	return listItem;
-}
+    if (children.length > 0) {
+      children.forEach(child => {
+        if (typeof child === "string") {
+          child = document.createTextNode(child);
+        }
 
-function addTodoItem(event) {
-	event.preventDefault();
+        element.appendChild(child);
+      });
+    }
 
-	if (addInput.value === "") return alert('Необходимо ввести название');
+    return element;
+  }
 
-	const todoItem = createTodoItem(addInput.value);
-	todoList.appendChild(todoItem);
-	addInput.value = '';
-}
+  function createTodoItem(title) {
+    const checkbox = createElement("input", {
+      type: "checkbox",
+      className: "checkbox"
+    });
+    const label = createElement("label", { className: "title" }, title);
+    const editInput = createElement("input", {
+      input: "text",
+      className: "textfield"
+    });
+    const editButton = createElement(
+      "button",
+      { className: "edit" },
+      "Изменить"
+    );
+    const deleteButton = createElement(
+      "button",
+      { className: "delete" },
+      "Удалить"
+    );
+    const listItem = createElement(
+      "li",
+      { className: "todo-item" },
+      checkbox,
+      label,
+      editInput,
+      editButton,
+      deleteButton
+    );
 
-function bindEvents(todoItem) {
-	const checkbox = todoItem.querySelector('.checkbox');
-	const editButton = todoItem.querySelector('button.edit');
-	const deleteButton = todoItem.querySelector('button.delete');
+    bindEvents(listItem);
 
-	checkbox.addEventListener('change', toggleTodoItem);
-	editButton.addEventListener('click',editTodoItem);
-	deleteButton.addEventListener('click', deleteTodoItem);
-}
+    return listItem;
+  }
 
-function toggleTodoItem() {
-	const listItem = this.parentElement;
-	listItem.classList.toggle('completed');
-}
+  function addTodoItem(event) {
+    event.preventDefault();
 
-function editTodoItem() {
-	const listItem = this.parentNode;
-	const title = listItem.querySelector('.title');
-	const editInput = listItem.querySelector('.textfield');
-	const isEditing = listItem.classList.contains('editing');
+    if (addInput.value === "") return alert("Необходимо ввести название");
 
-	if (isEditing) {
-		title.innerText = editInput.value;
-		this.innerText = 'Изменить';
-	} else {
-		editInput.value = title.innerText;
-		this.innerText = 'Сохранить';
-	}
+    const todoItem = createTodoItem(addInput.value);
+    todoList.appendChild(todoItem);
+    addInput.value = "";
+  }
 
-	listItem.classList.toggle('editing');
-}
+  function bindEvents(todoItem) {
+    const checkbox = todoItem.querySelector(".checkbox");
+    const editButton = todoItem.querySelector("button.edit");
+    const deleteButton = todoItem.querySelector("button.delete");
 
-function deleteTodoItem() {
-	const listItem = this.parentNode;
-	todoList.removeChild(listItem);
-}
+    checkbox.addEventListener("change", toggleTodoItem);
+    editButton.addEventListener("click", editTodoItem);
+    deleteButton.addEventListener("click", deleteTodoItem);
+  }
 
-function main() {
-	todoForm.addEventListener('submit', addTodoItem);
-	todoItems.forEach(item => bindEvents(item));
-}
+  function toggleTodoItem() {
+    const listItem = this.parentElement;
+    listItem.classList.toggle("completed");
+  }
 
-	return main;
+  function editTodoItem() {
+    const listItem = this.parentNode;
+    const title = listItem.querySelector(".title");
+    const editInput = listItem.querySelector(".textfield");
+    const isEditing = listItem.classList.contains("editing");
+
+    if (isEditing) {
+      title.innerText = editInput.value;
+      this.innerText = "Изменить";
+    } else {
+      editInput.value = title.innerText;
+      this.innerText = "Сохранить";
+    }
+
+    listItem.classList.toggle("editing");
+  }
+
+  function deleteTodoItem() {
+    const listItem = this.parentNode;
+    todoList.removeChild(listItem);
+  }
+
+  function main() {
+    todoForm.addEventListener("submit", addTodoItem);
+    todoItems.forEach(item => bindEvents(item));
+  }
+
+  return main;
 })(document);
 
 main();
